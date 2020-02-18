@@ -53,8 +53,17 @@ function* get99BottlesOfBeer() {
  * @return {Iterable.<number>}
  *
  */
-function getFibonacciSequence() {
-  throw new Error('Not implemented');
+function* getFibonacciSequence() {
+  let x1 = 0,
+    x2 = 1,
+    d = 0;
+  yield x1;
+  while (x1 < 39088169) {
+    yield x2;
+    d = x2;
+    x2 = x1 + x2;
+    x1 = d;
+  }
 }
 
 
@@ -88,8 +97,15 @@ function getFibonacciSequence() {
  *  depthTraversalTree(node1) => node1, node2, node3, node4, node5, node6, node7, node8
  *
  */
-function depthTraversalTree(root) {
-  throw new Error('Not implemented');
+function* depthTraversalTree(root) {
+  const nodes = [root];
+  while (nodes.length) {
+    const current = nodes.pop();
+    if (current.children) {
+      nodes.push(...current.children.reverse());
+    }
+    yield current;
+  }
 }
 
 
@@ -114,8 +130,16 @@ function depthTraversalTree(root) {
  *           8
  *
  */
-function breadthTraversalTree(root) {
-  throw new Error('Not implemented');
+function* breadthTraversalTree(root) {
+  const nodes = [root];
+  let place = 0;
+  while (place < nodes.length) {
+    const current = nodes[place++];
+    if (current.children) {
+      nodes.push(...current.children);
+    }
+    yield current;
+  }
 }
 
 
@@ -132,8 +156,21 @@ function breadthTraversalTree(root) {
  *   [ 0 ], [ 2, 4, 6, ... ]  => [ 0, 2, 4, 6, ... ]
  *   [ 1, 3, 5, ... ], [ -1 ] => [ -1, 1, 3, 5, ...]
  */
-function mergeSortedSequences(source1, source2) {
-  throw new Error('Not implemented');
+function* mergeSortedSequences(source1, source2) {
+  const src1 = source1();
+  const src2 = source2();
+  while (true) {
+    const value1 = src1.next().value;
+    const value2 = src2.next().value;
+    if (value1 === undefined) {
+      yield value2;
+    } else if (value2 === undefined) {
+      yield value1;
+    } else {
+      yield Math.min(value1, value2);
+      yield Math.max(value1, value2);
+    }
+  }
 }
 
 module.exports = {
